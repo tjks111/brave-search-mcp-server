@@ -1,5 +1,8 @@
 FROM node:alpine@sha256:22b3c1a1171c798c0429f36272922dbb356bbab8a6d11b3b095a143d3321262a AS builder
 
+# Update OpenSSL to fix CVE-2025-4575
+RUN apk add --no-cache openssl=3.5.1-r0
+
 WORKDIR /app
 
 COPY ./package.json ./package.json
@@ -13,6 +16,9 @@ COPY ./tsconfig.json ./tsconfig.json
 RUN npm run build
 
 FROM node:alpine@sha256:22b3c1a1171c798c0429f36272922dbb356bbab8a6d11b3b095a143d3321262a AS release
+
+# Update OpenSSL to fix CVE-2025-4575
+RUN apk add --no-cache openssl=3.5.1-r0
 
 WORKDIR /app
 
