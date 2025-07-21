@@ -7,18 +7,17 @@ type Configuration = {
   braveApiKey: string;
 };
 
-const state: Configuration & { ready: boolean } = {
-  transport: 'http',
+const state: Configuration = {
   port: 8080,
   host: '0.0.0.0',
   braveApiKey: process.env.BRAVE_API_KEY ?? '',
-  ready: false,
+  transport: (process.env.BRAVE_MCP_TRANSPORT as 'stdio' | 'http') ?? 'http',
 };
 
 export function getOptions(): Configuration | false {
   const program = new Command()
-    .option('--brave-api-key <string>', 'Brave API key', process.env.BRAVE_API_KEY ?? '')
-    .option('--transport <stdio|http>', 'transport type', process.env.BRAVE_MCP_TRANSPORT ?? 'http')
+    .option('--transport <stdio|http>', 'transport type', state.transport)
+    .option('--brave-api-key <string>', 'Brave API key', state.braveApiKey)
     .option(
       '--port <number>',
       'desired port for HTTP transport',
@@ -37,13 +36,6 @@ export function getOptions(): Configuration | false {
   if (!['stdio', 'http'].includes(options.transport)) {
     console.error(
       `Invalid --transport value: '${options.transport}'. Must be one of: stdio, http.`
-    );
-    return false;
-  }
-
-  if (!options.braveApiKey) {
-    console.error(
-      'Error: --brave-api-key is required. You can get one at https://brave.com/search/api/.'
     );
     return false;
   }
@@ -67,9 +59,17 @@ export function getOptions(): Configuration | false {
   state.transport = options.transport;
   state.port = options.port;
   state.host = options.host;
-  state.ready = true;
 
   return options as Configuration;
+}
+
+// Helper function to validate API key when needed
+export function validateApiKey(): void {
+  if (!state.braveApiKey) {
+    throw new Error(
+      'Brave API key is required to execute search tools. Please set the BRAVE_API_KEY environment variable or use the --brave-api-key command line option. You can get an API key at https://brave.com/search/api/'
+    );
+  }
 }
 
 export default state;

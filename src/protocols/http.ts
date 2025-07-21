@@ -12,11 +12,6 @@ const yieldGenericServerError = (res: Response) => {
 };
 
 export const start = () => {
-  if (!config.ready) {
-    console.error('Invalid configuration');
-    process.exit(1);
-  }
-
   const app = express();
 
   app.use(express.json());
@@ -43,6 +38,11 @@ export const start = () => {
 
   app.listen(config.port, config.host, () => {
     console.error(`Server is running on http://${config.host}:${config.port}/mcp`);
+    if (!config.braveApiKey) {
+      console.error(
+        'Note: No Brave API key configured. Tools will require an API key when executed.'
+      );
+    }
   });
 };
 

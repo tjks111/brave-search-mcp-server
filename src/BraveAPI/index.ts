@@ -1,5 +1,5 @@
 import type { Endpoints } from './types.js';
-import config from '../config.js';
+import config, { validateApiKey } from '../config.js';
 import { checkRateLimit, log, stringify } from '../utils.js';
 
 const typeToPathMap: Record<keyof Endpoints, string> = {
@@ -12,18 +12,21 @@ const typeToPathMap: Record<keyof Endpoints, string> = {
   summarizer: '/res/v1/summarizer/search',
 };
 
-const defaultRequestHeaders: Record<string, string> = {
-  Accept: 'application/json',
-  'Accept-Encoding': 'gzip',
-  'X-Subscription-Token': config.braveApiKey,
-};
-
 async function issueRequest<T extends keyof Endpoints>(
   endpoint: T,
   parameters: Endpoints[T]['params'],
   // TODO (Sampson): Implement support for custom request headers (helpful for POIs, etc.)
   requestHeaders: Endpoints[T]['requestHeaders'] = {} as Endpoints[T]['requestHeaders']
 ): Promise<Endpoints[T]['response']> {
+  // Validate API key is present before making any requests
+  validateApiKey();
+
+  const defaultRequestHeaders: Record<string, string> = {
+    Accept: 'application/json',
+    'Accept-Encoding': 'gzip',
+    'X-Subscription-Token': config.braveApiKey!,
+  };
+
   // TODO (Sampson): Improve rate-limit logic to support self-throttling and n-keys
   // checkRateLimit();
 
