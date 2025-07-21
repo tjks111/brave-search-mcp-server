@@ -11,7 +11,7 @@ const state: Configuration = {
   port: 8080,
   host: '0.0.0.0',
   braveApiKey: process.env.BRAVE_API_KEY ?? '',
-  transport: (process.env.BRAVE_MCP_TRANSPORT as 'stdio' | 'http') ?? 'http',
+  transport: (process.env.BRAVE_MCP_TRANSPORT as 'stdio' | 'http') ?? 'stdio',
 };
 
 export function getOptions(): Configuration | false {
