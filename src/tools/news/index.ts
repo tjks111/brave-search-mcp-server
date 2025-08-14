@@ -7,7 +7,6 @@ export const name = 'brave_news_search';
 
 export const annotations: ToolAnnotations = {
   title: 'Brave News Search',
-  openWorldHint: true,
 };
 
 export const description = `
