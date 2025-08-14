@@ -7,7 +7,6 @@ export const name = 'brave_video_search';
 
 export const annotations: ToolAnnotations = {
   title: 'Brave Video Search',
-  openWorldHint: true,
 };
 
 export const description = `
