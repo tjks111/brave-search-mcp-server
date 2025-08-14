@@ -15,7 +15,6 @@ export const name = 'brave_local_search';
 
 export const annotations: ToolAnnotations = {
   title: 'Brave Local Search',
-  openWorldHint: true,
 };
 
 export const description = `
