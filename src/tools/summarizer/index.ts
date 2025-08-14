@@ -9,7 +9,6 @@ export const name = 'brave_summarizer';
 
 export const annotations: ToolAnnotations = {
   title: 'Brave Summarizer',
-  openWorldHint: true,
 };
 
 export const description = `
