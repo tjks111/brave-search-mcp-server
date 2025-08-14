@@ -23,10 +23,6 @@ export const start = () => {
 
   app.all('/mcp', async (req: Request, res: Response) => {
     try {
-      // Set longer timeout for Railway (default is 30s, we'll set 25s to be safe)
-      req.timeout = 25000;
-      res.timeout(25000);
-      
       const transport = new StreamableHTTPServerTransport({
         // Setting to undefined will opt-out of session-id generation
         sessionIdGenerator: undefined,
@@ -50,10 +46,10 @@ export const start = () => {
     console.log(`Server is running on http://${config.host}:${config.port}/mcp`);
   });
 
-  // Set server timeout to 30 seconds (Railway's limit)
-  httpServer.timeout = 30000;
-  httpServer.keepAliveTimeout = 25000;
-  httpServer.headersTimeout = 26000;
+  // Set server timeout to 25 seconds to work within Railway's limits
+  httpServer.timeout = 25000;
+  httpServer.keepAliveTimeout = 20000;
+  httpServer.headersTimeout = 21000;
 };
 
 export default { start };
