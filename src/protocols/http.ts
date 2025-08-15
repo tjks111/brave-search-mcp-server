@@ -46,9 +46,11 @@ export const start = () => {
       await transport.handleRequest(req, res, req.body);
       
       console.log('MCP request handled successfully');
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('MCP request error:', error);
-      console.error('Error stack:', error.stack);
+      if (error instanceof Error) {
+        console.error('Error stack:', error.stack);
+      }
       if (!res.headersSent) {
         yieldGenericServerError(res);
       }
